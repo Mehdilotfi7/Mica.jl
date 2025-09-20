@@ -1,0 +1,46 @@
+using Plots
+
+# Create the base plot with noisy data as red dots
+p = plot(data;
+    seriestype = :scatter,
+    markershape = :circle,
+    markerstrokecolor = :red,
+    markercolor = :red,
+    label = "Noisy Observations",
+    xlabel = "Time",
+    ylabel = "Infected",
+    legend = :topright,
+    title = "SIR Toy Model - Changepoint Detection",
+    grid = true,
+    size = (800, 450)
+)
+
+# Add the ODE simulation as a smooth blue line
+plot!(p, recon_times, recon_infections;
+    lw = 2.5,
+    linestyle = :solid,
+    color = :blue,
+    label = "Simulated ODE Fit"
+)
+
+# Add vertical lines for true changepoints
+vline!(p, [50,100];
+    linestyle = :dash,
+    color = :green,
+    lw = 2,
+    label = "True CPs"
+)
+
+# Add vertical lines for detected changepoints
+vline!(p, detected_cp .+ 0.5;
+    linestyle = :solid,
+    color = :black,
+    lw = 2,
+    label = "Detected CPs"
+)
+
+savefig(p,"first_ex_docs")
+
+
+
+display(p)
