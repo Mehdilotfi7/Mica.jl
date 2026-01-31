@@ -67,7 +67,7 @@ function objective_function(
 #
        for i in 1:num_segments
 
-           # defing the start and the end of intervals
+           # defining the start and the end of intervals
            idx_start = (i == 1) ? 1 : change_points[i - 1] + 1
            idx_end   = (i > length(change_points)) ? size(data, 2) : change_points[i]
            segment_data = data[:, idx_start:idx_end]
@@ -79,7 +79,7 @@ function objective_function(
 
            # simulating the model 
            sim_data = simulate_model(model_spec)
-           # computing oveall loss
+           # computing overall loss
            total_loss += loss_function(segment_data, sim_data)
      
            # Update initial condition if applicable
@@ -113,8 +113,8 @@ Convenient closure to call `objective_function` with fixed outer parameters.
 function wrapped_obj_function(chromosome)
     return objective_function(
         chromosome, 
-        parnames,
-        change_points, 
+        change_points,
+        parnames, 
         n_global, 
         n_segment_specific, 
         model_manager, 
@@ -123,6 +123,5 @@ function wrapped_obj_function(chromosome)
     )
 end
 
-#end # module
+# end # module
 
-# test from PC
