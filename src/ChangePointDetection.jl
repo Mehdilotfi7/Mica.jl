@@ -51,11 +51,11 @@ function optimize_with_changepoints(
         model_manager, loss_function, data
     )
 
-    # settong seed for reproducibility of the results 
+    # setting seed for reproducibility of the results 
     Random.seed!(1234)
-    #running Genetica algorithms 
+    #running Genetic algorithms 
     result = Evolutionary.optimize(wrapped_obj, BoxConstraints(bounds...), chromosome, ga, options)
-    # retun  best loss and best parameters 
+    # return  best loss and best parameters 
     return Evolutionary.minimum(result), Evolutionary.minimizer(result)
 end
 
@@ -114,14 +114,11 @@ function evaluate_segment(
     y = Vector{Vector{Float64}}()
     for j in (a + min_length):step:(b - min_length)
         new_cp = sort([CP; j])
-        @show new_cp
         loss, best = optimize_with_changepoints(
             objective_function, chromosome, parnames, new_cp, bounds, ga,
             n_global, n_segment_specific,
             model_manager, loss_function, data
         )
-        @show loss
-        @show best
 
         sim, plt = simulate_full_model(best, new_cp, parnames,
         n_global, n_segment_specific,
@@ -141,7 +138,6 @@ function evaluate_segment(
             segment_lengths=segment_lengths,
             num_segments=length(new_cp) + 1
         )
-        @show pen
 
         push!(x, loss + pen)
         push!(y, best)
@@ -178,19 +174,16 @@ function detect_changepoints(
     ga, # i should define type later
     min_length::Int, step::Int,
     penalty_fn::Function = default_penalty,  # Default penalty
-    data_indices::Vector{Int} = nothing
+    data_indices::Union{Nothing,Vector{Int}} = nothing
 )
     tau = [(0, n)]
     CP = Int[]
-    @show CP
 
     loss_val, best_params = optimize_with_changepoints(
         objective_function, initial_chromosome, parnames, CP, bounds, ga,
         n_global, n_segment_specific,
         model_manager, loss_function, data
     )
-    @show loss_val
-    @show best_params
     
     sim, plt = simulate_full_model(best_params, CP, parnames,
                           n_global, n_segment_specific,
@@ -226,8 +219,6 @@ function detect_changepoints(
                 CP = sort(CP)
                 loss_val = minval
                 best_params = y[idx]
-                @show CP
-                @show best_params
 
                 sim, plt = simulate_full_model(best_params, CP, parnames,
                           n_global, n_segment_specific,

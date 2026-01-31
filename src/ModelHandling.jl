@@ -12,7 +12,7 @@ A wrapper around any model specification (ODE, Difference, or Regression) that p
 a unified interface to:
 
 - Access the initial condition
-- Segment model-specific data for a given intervalyes
+- Segment model-specific data for a given interval
 - Generate per-segment models with updated parameters
 - Identify the model type for dispatching logic
 
